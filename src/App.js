@@ -182,6 +182,15 @@ class App extends React.Component {
               index={index}
               color={this.selectColorBar(index)}
               updateHealth={(i, value, type) => this.updateHealth(i, value, type)}
+              duplicate={(i) => {
+                const listEncounter = this.state.encounter;
+                listEncounter.push(listEncounter[i]);
+                this.setState({
+                  encounter: listEncounter		
+                }, () => {
+                this.saveDataLocal(listEncounter);
+                })
+              }}
               remove={(i) => {
                 const listEncounter = this.state.encounter;
                 listEncounter.splice(i,1);

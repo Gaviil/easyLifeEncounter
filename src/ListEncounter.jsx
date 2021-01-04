@@ -72,10 +72,25 @@ class listEncounter extends React.Component {
           >
             Heal
           </button>
-
-          <button
+	        <button
             style={{
               marginLeft: 150,
+              backgroundColor: '#002245',
+              borderWidth: 0,
+              color: '#16d3d4',
+              fontWeight: 'bold',
+              fontSize: 18,
+              outline: 'none',
+            }}
+            onClick={() => {
+            this.props.duplicate(this.props.index);
+          }}
+          >
+            Duplicate
+          </button>
+          <button
+            style={{
+              marginLeft: 10,
               backgroundColor: '#002245',
               borderWidth: 0,
               color: '#5087ec',
