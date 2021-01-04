@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/easyLifeEncounter/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/easyLifeEncounter/static/js/main.0c444f81.chunk.js",
+    "main.js.map": "/easyLifeEncounter/static/js/main.0c444f81.chunk.js.map",
+    "runtime-main.js": "/easyLifeEncounter/static/js/runtime-main.7a68183a.js",
+    "runtime-main.js.map": "/easyLifeEncounter/static/js/runtime-main.7a68183a.js.map",
+    "static/js/2.1b25aebf.chunk.js": "/easyLifeEncounter/static/js/2.1b25aebf.chunk.js",
+    "static/js/2.1b25aebf.chunk.js.map": "/easyLifeEncounter/static/js/2.1b25aebf.chunk.js.map",
+    "static/js/3.e4676f93.chunk.js": "/easyLifeEncounter/static/js/3.e4676f93.chunk.js",
+    "static/js/3.e4676f93.chunk.js.map": "/easyLifeEncounter/static/js/3.e4676f93.chunk.js.map",
+    "index.html": "/easyLifeEncounter/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/easyLifeEncounter/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.1b25aebf.chunk.js.LICENSE.txt": "/easyLifeEncounter/static/js/2.1b25aebf.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7a68183a.js",
+    "static/js/2.1b25aebf.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.0c444f81.chunk.js"
+  ]
+}
