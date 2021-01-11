@@ -55,25 +55,29 @@ class App extends React.Component {
     const updateHealth = this.state.encounter;
     switch (type) {
       case 'up':
-        updateHealth[i].currentHealth = JSON.stringify(parseInt(updateHealth[i].currentHealth) + value);
-        this.setState({
-          encounter: updateHealth
-        },() => {
-          this.saveDataLocal(updateHealth);
-        });
+        if(value) {
+          updateHealth[i].currentHealth = JSON.stringify(parseInt(updateHealth[i].currentHealth) + value);
+          this.setState({
+            encounter: updateHealth
+          },() => {
+            this.saveDataLocal(updateHealth);
+          });
+        }
         break;
       case 'lower':
-        if(parseInt(updateHealth[i].currentHealth) - value >= 0) {
-          updateHealth[i].currentHealth = JSON.stringify(parseInt(updateHealth[i].currentHealth) - value);
-        } else {
-          updateHealth[i].currentHealth = JSON.stringify(0)
+        if(value) {
+          if(parseInt(updateHealth[i].currentHealth) - value >= 0) {
+            updateHealth[i].currentHealth = JSON.stringify(parseInt(updateHealth[i].currentHealth) - value);
+          } else {
+            updateHealth[i].currentHealth = JSON.stringify(0)
+          }
+          
+          this.setState({
+            encounter: updateHealth
+          },() => {
+            this.saveDataLocal(updateHealth);
+          });
         }
-        
-        this.setState({
-          encounter: updateHealth
-        },() => {
-          this.saveDataLocal(updateHealth);
-        });
         break;
     }
   }
