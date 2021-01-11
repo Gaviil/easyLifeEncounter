@@ -1,16 +1,19 @@
 /* eslint-disable default-case */
 import React from 'react';
 import ListEncounter from './ListEncounter.jsx'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name:'',
-      heathPoint: 1,
+      heathPoint: undefined,
       encounter: JSON.parse(localStorage.getItem('listEncounter')) || [],
-      color: [
-        '#ff3064', '#16d3d4', '#1bc97f', '#fec925', '#eb32bc', '#5087ec'
-      ]
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -27,19 +30,24 @@ class App extends React.Component {
 
   handleClick(e) {
     let listEncounter = this.state.encounter;
-    listEncounter.push({
-      name:this.state.name,
-      maxHealth:this.state.heathPoint,
-      currentHealth:this.state.heathPoint
-    });
+    if(this.state.heathPoint) {
+      listEncounter.push({
+        name:this.state.name,
+        maxHealth:this.state.heathPoint,
+        currentHealth:this.state.heathPoint
+      });
 
-    this.setState({
-      name:'',
-      heathPoint: 1,
-      encounter: listEncounter,
-    }, () => {
-      this.saveDataLocal(listEncounter);
-    })
+      this.setState({
+        name:'',
+        heathPoint: 1,
+        encounter: listEncounter,
+      }, () => {
+        this.saveDataLocal(listEncounter);
+      })
+    } else {
+      window.alert("Health data can't be empty !")
+    }
+   
     e.preventDefault();
   }
 
@@ -47,9 +55,7 @@ class App extends React.Component {
     const updateHealth = this.state.encounter;
     switch (type) {
       case 'up':
-        if(parseInt(updateHealth[i].currentHealth) + value <= updateHealth[i].maxHealth) {
-          updateHealth[i].currentHealth = JSON.stringify(parseInt(updateHealth[i].currentHealth) + value);
-        }
+        updateHealth[i].currentHealth = JSON.stringify(parseInt(updateHealth[i].currentHealth) + value);
         this.setState({
           encounter: updateHealth
         },() => {
@@ -59,7 +65,10 @@ class App extends React.Component {
       case 'lower':
         if(parseInt(updateHealth[i].currentHealth) - value >= 0) {
           updateHealth[i].currentHealth = JSON.stringify(parseInt(updateHealth[i].currentHealth) - value);
+        } else {
+          updateHealth[i].currentHealth = JSON.stringify(0)
         }
+        
         this.setState({
           encounter: updateHealth
         },() => {
@@ -73,12 +82,6 @@ class App extends React.Component {
     localStorage.setItem('listEncounter', JSON.stringify(listEncounter))
   }
 
-  selectColorBar = (i) => {
-    if (i >= this.state.color.length) {
-      return this.state.color[i % this.state.color.length];
-    }
-    return this.state.color[i];
-  }
 
   clearAll = () => {
     this.setState({
@@ -90,121 +93,76 @@ class App extends React.Component {
 
 
   render() {
-    document.body.style.backgroundColor = "#002245";
 
     return (
-      <div style={{padding: 20, display: 'flex', flexDirection: 'column'}}>
-        <div>
-          <form 
-            style={{
-              padding: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              backgroundColor:'#002245'
-            }}>
-            <label style={{color: '#fff'}}>
-              Name : 
-              <input
-                name="name"
-                type="text"
-                style={{
-                  marginTop: 10,
-                  borderWidth: 0,
-                  borderBottomWidth: 1,
-                  outline: 'none',
-                  marginInline: 10,
-                  paddingInline: 5,
-                  borderColor: '#fff',
-                  backgroundColor: '#002245',
-                  color: '#fff'
-                }}
-                value={this.state.name}
-                onChange={this.handleInputChange} />
-            </label>
-            <label style={{color: '#fff'}}>
-              HealthPoint :
-              <input
-                min={1}
-                name="heathPoint"
-                type="number"
-                style={{
-                  marginTop: 20,
-                  width: 105,
-                  borderWidth: 0,
-                  borderBottomWidth: 1,
-                  outline: 'none',
-                  marginInline: 10,
-                  paddingInline: 5,
-                  borderColor: '#fff',
-                  backgroundColor: '#002245',
-                  color: '#fff'
-                }}
-                value={this.state.heathPoint}
-                onChange={this.handleInputChange} />
-            </label>
-          <button 
-            onClick={this.handleClick}
-            style={{
-              marginTop: 10,
-              backgroundColor: '#002245',
-              width: 100,
-              borderWidth: 0,
-              color: '#16d3d4',
-              fontWeight: 'bold',
-              fontSize: 18,
-              outline: 'none',
-            }}
-          >
-              Create
-            </button>
-        </form>
-        <button
-          onClick={() => this.clearAll()}
-          style={{
-              marginTop: 5,
-              backgroundColor: '#002245',
-              borderWidth: 0,
-              width: 100,
-              color: '#fec925',
-              fontWeight: 'bold',
-              fontSize: 18,
-              outline: 'none',
-            }}
-        >
-          Clear all
-        </button>
-        </div>
-        <div>
+      <Container>
+        <Row>
+          <Col>
+            <Container>
+              <Form>
+                <Form.Row className="align-items-center">
+                  <Col lg={4} md={6} sd={12}>
+                    <Form.Control
+                        placeholder="Name"
+                        name="name"
+                        type="text"
+                        value={this.state.name}
+                        onChange={this.handleInputChange}  
+                      />
+                  </Col>
+                  <Col lg={4} md={6} sd={12}>
+                    <Form.Control
+                        placeholder="Healthpoint"
+                        name="heathPoint"
+                        type="number"
+                        value={this.state.heathPoint}
+                        onChange={this.handleInputChange}
+                      />
+                  </Col>
+                  <Col xs="auto" className="my-1">
+                    <Button onClick={this.handleClick} variant="primary" type="submit">Create</Button>
+                  </Col>
+                  <Col xs="auto" className="my-1">
+                    <Button onClick={() => this.clearAll()} variant="danger">Clear all</Button>
+                  </Col>
+                </Form.Row>
+              </Form>
+            </Container>
+          </Col>
+        </Row>
+        <Row style={{marginTop: 20}}>
           {this.state.encounter.map((value,index) => (
-             <ListEncounter
-              key={index}
-              encounter={value}
-              index={index}
-              color={this.selectColorBar(index)}
-              updateHealth={(i, value, type) => this.updateHealth(i, value, type)}
-              duplicate={(i) => {
-                const listEncounter = this.state.encounter;
-                listEncounter.push(listEncounter[i]);
-                this.setState({
-                  encounter: listEncounter		
-                }, () => {
-                this.saveDataLocal(listEncounter);
-                })
-              }}
-              remove={(i) => {
-                const listEncounter = this.state.encounter;
-                listEncounter.splice(i,1);
-                this.setState({
-                  encounter: listEncounter
-                },() => {
+            <Col key={index} lg={6} md={8} sd={12}>
+              <ListEncounter
+                encounter={value}
+                index={index}
+                updateHealth={(i, value, type) => this.updateHealth(i, value, type)}
+                duplicate={(i) => {
+                  const listEncounter = this.state.encounter;
+                  const newEncounter = listEncounter[i];
+                  listEncounter.push(newEncounter);
+                  this.setState({
+                    encounter: listEncounter		
+                  }, () => {
                   this.saveDataLocal(listEncounter);
-                })
-              }}
-            />
-            ))
-          }
-        </div>
-      </div>
+                  })
+                }}
+                remove={(i) => {
+                  const listEncounter = this.state.encounter;
+                  listEncounter.splice(i,1);
+                  this.setState({
+                    encounter: listEncounter
+                  },() => {
+                    this.saveDataLocal(listEncounter);
+                  })
+                }}
+              />
+            </Col>
+              ))
+            }
+        </Row>
+      </Container>
+      
     );
   }
 

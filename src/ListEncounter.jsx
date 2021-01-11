@@ -1,10 +1,18 @@
 import React from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Badge from 'react-bootstrap/Badge';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
+import HealthBar from './HealthBar';
 
 class listEncounter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hp: null
+      hp: undefined
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -21,132 +29,46 @@ class listEncounter extends React.Component {
 
   render() {
     const {encounter} = this.props;
-    const currentPercent = (encounter.currentHealth * 100) / encounter.maxHealth; 
     return (
-      <div style={{flex: 1, marginTop: 20}}>
-        <p style={{color: '#fff', marginTop: 2}}>{encounter.name} </p>
-        <p style={{color: '#fff', marginTop: 2}}>{encounter.currentHealth} / {encounter.maxHealth}
-          <input
-            style={{
-              borderWidth: 0,
-              borderBottomWidth: 1,
-              outline: 'none',
-              marginInline: 10,
-              paddingInline: 5,
-              borderColor: '#fff',
-              backgroundColor: '#002245',
-              color: '#fff'
-            }}
-            min={1}
-            name="hp"
-            type="number"
-            value={this.state.hp}
-            onChange={this.handleInputChange} />
-          <button
-            style={{
-              backgroundColor: '#002245',
-              borderWidth: 0,
-              color: '#ff3064',
-              fontWeight: 'bold',
-              fontSize: 18,
-              outline: 'none',
-            }}
-            onClick={() => {
-            this.props.updateHealth(this.props.index, parseInt(this.state.hp), 'lower');
-            }}
-          >
-            Damage
-          </button>
-          <button
-            style={{
-              backgroundColor: '#002245',
-              borderWidth: 0,
-              color: '#1bc97f',
-              fontWeight: 'bold',
-              fontSize: 18,
-              outline: 'none',
-            }}
-            onClick={() => {
-            this.props.updateHealth(this.props.index, parseInt(this.state.hp), 'up');
-          }}
-          >
-            Heal
-          </button>
-	        <button
-            style={{
-              marginLeft: 150,
-              backgroundColor: '#002245',
-              borderWidth: 0,
-              color: '#16d3d4',
-              fontWeight: 'bold',
-              fontSize: 18,
-              outline: 'none',
-            }}
-            onClick={() => {
-            this.props.duplicate(this.props.index);
-          }}
-          >
-            Duplicate
-          </button>
-          <button
-            style={{
-              marginLeft: 10,
-              backgroundColor: '#002245',
-              borderWidth: 0,
-              color: '#5087ec',
-              fontWeight: 'bold',
-              fontSize: 18,
-              outline: 'none',
-            }}
-            onClick={() => {
-            this.props.remove(this.props.index);
-          }}
-          >
-            Remove
-          </button>
-        </p>
-        <div
-          style={{
-            position: 'relative',
-            width: 300,
-            height: 30,
-            backgroundColor: 'grey'
-          }}>
-            <div
-            style={{
-              width: `${currentPercent}%`,
-              height: '100%',
-              backgroundColor: this.props.color || '#16d3d4'
-            }}/>
-        
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              position:'absolute',
-              top: 0
-            }}>
-            <button
-              style={{
-                width: '50%',
-                height:'100%',
-                opacity: 0
-              }}
-              onClick={() => this.props.updateHealth(this.props.index, 1, 'lower')}
-              >
-              </button>
-            <button
-              style={{
-                width: '50%',
-                height:'100%',
-                opacity: 0
-              }}
-              onClick={() => this.props.updateHealth(this.props.index, 1, 'up')}
-              >
-            </button>
-          </div>
-        </div>
-      </div>
+      <Container>
+        <Row>
+          <Col style={{marginBottom: 10}}>
+            <Badge className="float-left" pill variant="info">{encounter.name}</Badge>
+            <Badge className="float-right" pill variant="info">{`${encounter.currentHealth} / ${encounter.maxHealth}`}</Badge>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <HealthBar
+              style={{marginTop: encounter.name ? 0 : 23}}
+              current={encounter.currentHealth}
+              max={encounter.maxHealth}
+              withName={encounter.name ? 1 : 0}
+            />
+          </Col>
+        </Row>
+        <Row style={{marginTop: 10}}>
+          <Col sm={3}>
+            <Form.Control
+              min={1}
+              style={{width: '100%'}}
+              name="hp"
+              placeholder="Hp"
+              type="number"
+              value={this.state.hp}
+              onChange={this.handleInputChange}
+            />
+          </Col>
+          <Col sm={3}>
+            <DropdownButton id="action-button" title="Action" variant="info">
+              <Dropdown.Item onClick={() => this.props.updateHealth(this.props.index, parseInt(this.state.hp), 'lower')} as="button">Damage</Dropdown.Item>
+              <Dropdown.Item onClick={() => this.props.updateHealth(this.props.index, parseInt(this.state.hp), 'up')} as="button">Heal</Dropdown.Item>
+              <Dropdown.Item disabled onClick={() => this.props.duplicate(this.props.index)} as="button">Duplicate</Dropdown.Item>
+              <Dropdown.Item onClick={() => this.props.remove(this.props.index)} as="button">Remove</Dropdown.Item>
+            </DropdownButton>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 
